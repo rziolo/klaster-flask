@@ -1,0 +1,15 @@
+{% extends "shared/templates/base.html" %}
+
+{% block module_name %}Moje Aplikacje - HUB{% endblock %}
+
+{% block content %}
+<div style="text-align: center; margin-top: 50px;">
+    <h3>Wybierz Moduł</h3>
+    <div style="display: flex; justify-content: center; gap: 20px; margin-top: 30px;">
+        <a href="/finanse" class="nav-btn" style="padding: 2rem; background: #005f73;">💰 Moje Finanse</a>
+        <a href="/inwestycje" class="nav-btn" style="padding: 2rem; background: #005f73;">📈 Moje Inwestycje</a>
+        <a href="/zdrowie" class="nav-btn" style="padding: 2rem; background: #005f73;">🏥 Moje Zdrowie</a>
+    </div>
+    <p style="margin-top: 40px; color: green;">✅ Połączono z bazą danych (192.168.1.156)</p>
+</div>
+{% endblock %}

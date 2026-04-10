@@ -1,0 +1,63 @@
+/* /var/www/html/flask/static/style.css */
+:root {
+    --primary-color: #005f73; /* Morski/Teal - zmiana względem fioletu */
+    --secondary-color: #0a9396;
+    --bg-color: #e9ecef;
+    --text-color: #212529;
+    --footer-bg: #343a40;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.header {
+    background: var(--primary-color);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.nav-btn {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid white;
+    color: white;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.nav-btn:hover { background: rgba(255,255,255,0.2); }
+
+.main-content { flex: 1; padding: 20px; }
+
+.footer {
+    background: var(--footer-bg);
+    color: #adb5bd;
+    padding: 1rem;
+    text-align: center;
+    font-size: 0.85rem;
+}
+
+.status-badge {
+    background: #198754;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.75rem;
+}
+
+/* Formaty polskie - pomocnicze */
+.number-pl { text-align: right; font-family: 'Courier New', monospace; }
+
+/* EOF */

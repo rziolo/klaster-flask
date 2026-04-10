@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Moje Aplikacje{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <a href="javascript:history.back()" class="nav-btn">← Powrót</a>
+        </div>
+        <div class="header-center">
+            <h2 style="margin:0;">{% block module_name %}Moje Aplikacje{% endblock %}</h2>
+        </div>
+        <div class="header-right">
+            <a href="/aplikacje" class="nav-btn">Strona Główna →</a>
+        </div>
+    </header>
+
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <p>Projekt Robert Zioło, wykonanie +AI</p>
+        <div>
+            SHARED BASE | 
+            Apps: <span class="status-badge">✅</span> | 
+            Finance: <span class="status-badge">✅</span> | 
+            Invest: <span class="status-badge">✅</span> | 
+            Health: <span class="status-badge">✅</span>
+        </div>
+    </footer>
+</body>
+</html>
