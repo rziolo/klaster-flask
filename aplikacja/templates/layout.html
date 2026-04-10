@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Klaster Flask{% endblock %}</title>
+    <style>
+        body { font-family: sans-serif; margin: 40px; background: #f4f4f4; }
+        .container { background: white; padding: 20px; border-radius: 8px; shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .status-on { color: #28a745; font-weight: bold; }
+        .status-off { color: #dc3545; font-weight: bold; }
+        nav { margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #007bff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="/finanse">Finanse</a>
+            <a href="/inwestycje">Inwestycje</a>
+            <a href="/zdrowie">Zdrowie</a>
+        </nav>
+        {% block content %}{% endblock %}
+        <hr>
+        <footer>
+            Status: 
+            {% if db_connected %}
+                <span class="status-on">● Połączono z bazą danych</span>
+            {% else %}
+                <span class="status-off">○ Brak połączenia z bazą danych</span>
+            {% endif %}
+        </footer>
+    </div>
+</body>
+</html>

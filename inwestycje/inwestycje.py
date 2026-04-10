@@ -1,25 +1,35 @@
 import os
-from flask import Flask
+from flask import Flask, render_template
 from dotenv import load_dotenv
 import mysql.connector
 
 load_dotenv()
 
-app = Flask(__name__)
+# Pełna ścieżka bezwzględna rozwiązuje problem TemplateNotFound
+app = Flask(__name__, template_folder='/var/www/html/flask/aplikacja/templates')
 
-@app.route('/inwestycje')
+def get_db_connection():
+    return mysql.connector.connect(
+        host=os.getenv('DB_HOST'),
+        user=os.getenv('DB_USER'),
+        password=os.getenv('DB_PASSWORD'),
+        database=os.getenv('DB_NAME'),
+        ssl_disabled=True
+    )
+
+@app.route('/inwestycje')  # <--- TUTAJ BYŁ BŁĄD (było /finanse)
 def index():
+    db_status = False
     try:
-        conn = mysql.connector.connect(
-            host=os.getenv('DB_HOST'),
-            user=os.getenv('DB_USER'),
-            password=os.getenv('DB_PASSWORD'),
-            database=os.getenv('DB_NAME'),
-            ssl_disabled=True
-        )
-        return "Serwis Inwestycje: Baza Inwestycje Połączona"
+        conn = get_db_connection()
+        if conn.is_connected():
+            db_status = True
+        conn.close()
     except Exception as e:
-        return f"Serwis Inwestycje: Błąd bazy ({str(e)})"
+        print(f"Błąd połączenia: {e}")
+        db_status = False
+
+    return render_template('index_inwestycje.html', db_connected=db_status)
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5002)
