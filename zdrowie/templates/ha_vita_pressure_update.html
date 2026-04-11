@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Edycja pomiaru</h2>
+<form method="POST" class="border p-4 rounded bg-white shadow-sm">
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label>Data</label>
+            <input type="datetime-local" name="Date" value="{{ row.Date.strftime('%Y-%m-%dT%H:%M') }}" class="form-control" required>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label>Skurczowe</label>
+            <input type="number" name="P_skurczowe" value="{{ row.P_skurczowe }}" class="form-control" required>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label>Rozkurczowe</label>
+            <input type="number" name="P_rozkurczowe" value="{{ row.P_rozkurczowe }}" class="form-control" required>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-warning">Aktualizuj</button>
+    <a href="{{ url_for('pressure_list') }}" class="btn btn-secondary">Anuluj</a>
+</form>
+{% endblock %}

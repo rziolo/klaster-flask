@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Wydruk Pomiarów Ciśnienia</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: white; font-size: 12pt; }
+        .table th { background-color: #f2f2f2 !important; color: black !important; }
+        @media print {
+            .no-print { display: none; }
+            @page { margin: 1cm; }
+        }
+    </style>
+</head>
+<body onload="window.print()">
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4 no-print">
+            <button onclick="window.history.back()" class="btn btn-secondary">Powrót</button>
+            <button onclick="window.print()" class="btn btn-primary">Drukuj ponownie</button>
+        </div>
+
+        <div class="text-center mb-4">
+            <h2>Dzienniczek Pomiarów Ciśnienia</h2>
+            <p class="text-muted">Wygenerowano dnia: {{ now.strftime('%Y-%m-%d %H:%M') }}</p>
+        </div>
+
+        <table class="table table-bordered table-sm">
+            <thead>
+                <tr class="text-center">
+                    <th>Data</th>
+                    <th>Godzina</th>
+                    <th>SYS</th>
+                    <th>DIA</th>
+                    <th>Tętno</th>
+                    <th>Waga</th>
+                    <th>Temp/Wilg</th>
+                    <th>Uwagi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                <tr>
+                    <td class="text-nowrap">{{ row.f_date }}</td>
+                    <td class="text-center">{{ row.f_time }}</td>
+                    <td class="text-center fw-bold">{{ row.P_skurczowe }}</td>
+                    <td class="text-center fw-bold">{{ row.P_rozkurczowe }}</td>
+                    <td class="text-center">{{ row.Puls }}</td>
+                    <td class="text-center">{{ row.waga_pl }}</td>
+                    <td class="text-center small">{{ row.temperatura }}°C / {{ row.wilgotnosc }}%</td>
+                    <td class="small">{{ row.uwagi }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

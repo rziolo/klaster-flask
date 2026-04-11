@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-success text-white">
+            <h3 class="mb-0"><i class="fas fa-plus-circle"></i> Nowy pomiar ciśnienia</h3>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Data i Godzina</label>
+                        <input type="datetime-local" name="date" class="form-control" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Miasto</label>
+                        <input type="text" name="miasto" class="form-control" value="Police">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">SYS (Skurczowe)</label>
+                        <input type="number" name="sys" class="form-control" placeholder="np. 120" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">DIA (Rozkurczowe)</label>
+                        <input type="number" name="dia" class="form-control" placeholder="np. 80" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Puls</label>
+                        <input type="number" name="puls" class="form-control" placeholder="np. 70" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Waga (kg)</label>
+                        <input type="number" step="0.1" name="waga" class="form-control" placeholder="np. 74.5">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Temperatura (°C)</label>
+                        <input type="number" name="temp" class="form-control" value="20">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Wilgotność (%)</label>
+                        <input type="number" name="wilg" class="form-control" value="50">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Uwagi</label>
+                    <textarea name="uwagi" class="form-control" rows="2"></textarea>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a href="{{ url_for('pressure_list') }}" class="btn btn-secondary">Anuluj</a>
+                    <button type="submit" class="btn btn-success px-5">Zapisz pomiar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Automatyczne ustawienie aktualnej daty i godziny
+    document.addEventListener('DOMContentLoaded', function() {
+        const now = new Date();
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        document.querySelector('input[type="datetime-local"]').value = now.toISOString().slice(0, 16);
+    });
+</script>
+{% endblock %}

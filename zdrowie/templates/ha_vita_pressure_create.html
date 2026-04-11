@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Nowy pomiar - Moje Zdrowie{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <a href="{{ url_for('pressure_list') }}" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Powrót</a>
+        <h2 class="text-primary">Nowy wpis ciśnienia</h2>
+        <button type="submit" form="pressureForm" class="btn btn-success px-4">Zapisz</button>
+    </div>
+
+    <form id="pressureForm" method="POST" class="border p-4 rounded bg-white shadow">
+        <div class="mb-4 p-3 rounded bg-gray-light d-flex justify-content-between align-items-center">
+            <div>
+                <i class="fas fa-map-marker-alt"></i> <strong>Lokalizacja:</strong> <span id="locality">{{ locality }}</span>
+                <br>
+                {% if weather %}
+                    <i class="fas fa-cloud-sun"></i> <strong>Pogoda:</strong> {{ weather.pressure }} hPa, {{ weather.temp }} ℃, {{ weather.humidity }} %
+                {% else %}
+                    <small class="text-muted">Brak danych pogodowych.</small>
+                {% endif %}
+            </div>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="copyWeather()">
+                Wprowadź <i class="fas fa-arrow-down"></i>
+            </button>
+        </div>
+
+        <table class="table table-borderless table-form">
+            <tr>
+                <td style="width: 33%;">
+                    <label class="form-label small fw-bold">Data i godzina</label>
+                    <input type="datetime-local" name="Date" value="{{ current_time }}" class="form-control" required>
+                </td>
+                <td style="width: 33%;">
+                    <label class="form-label small fw-bold">Skurczowe (mmHg)</label>
+                    <input type="number" name="P_skurczowe" placeholder="120" class="form-control" required>
+                </td>
+                <td style="width: 33%;">
+                    <label class="form-label small fw-bold">Waga (kg)</label>
+                    <input type="text" name="waga" placeholder="80,5" class="form-control">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="form-label small fw-bold">Miasto</label>
+                    <input type="text" id="miasto" name="miasto" placeholder="Miasto" class="form-control" required>
+                </td>
+                <td>
+                    <label class="form-label small fw-bold">Rozkurczowe (mmHg)</label>
+                    <input type="number" name="P_rozkurczowe" placeholder="80" class="form-control" required>
+                </td>
+                <td>
+                    <label class="form-label small fw-bold">Puls (bpm)</label>
+                    <input type="number" name="Puls" placeholder="70" class="form-control" required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="form-label small fw-bold">Ciśnienie zewn. (hPa)</label>
+                    <input type="number" id="atmosf" name="atmosf" placeholder="1013" class="form-control" required>
+                </td>
+                <td>
+                    <label class="form-label small fw-bold">Temperatura (℃)</label>
+                    <input type="number" id="temperatura" name="temperatura" placeholder="15" class="form-control" required>
+                </td>
+                <td>
+                    <label class="form-label small fw-bold">Wilgotność (%)</label>
+                    <input type="number" id="wilgotnosc" name="wilgotnosc" placeholder="50" class="form-control" required>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <label class="form-label small fw-bold">Uwagi</label>
+                    <textarea name="uwagi" rows="3" class="form-control" placeholder="Dodatkowe informacje..."></textarea>
+                </td>
+            </tr>
+        </table>
+    </form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function copyWeather() {
+        const loc = document.getElementById("locality").textContent;
+        const w = {{ weather | tojson if weather else 'null' }};
+        if (w) {
+            document.getElementById("miasto").value = loc;
+            document.getElementById("atmosf").value = w.pressure;
+            document.getElementById("temperatura").value = w.temp;
+            document.getElementById("wilgotnosc").value = w.humidity;
+        }
+    }
+</script>
+{% endblock %}

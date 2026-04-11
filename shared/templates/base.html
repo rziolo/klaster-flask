@@ -3,36 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Moje Aplikacje{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    {% block extra_css %}{% endblock %}
+    <title>{% block title %}Moja Aplikacja{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #f8f9fa; }
+        .btn-group-sm > .btn { padding: 0.25rem 0.5rem; }
+    </style>
 </head>
 <body>
-    <header class="header">
-        <div class="header-left">
-            <a href="javascript:history.back()" class="nav-btn">← Powrót</a>
+    <nav class="navbar navbar-dark bg-dark mb-4">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">{{ tytul_aplikacji if tytul_aplikacji else 'System Domowy' }}</span>
         </div>
-        <div class="header-center">
-            <h2 style="margin:0;">{% block module_name %}Moje Aplikacje{% endblock %}</h2>
-        </div>
-        <div class="header-right">
-            <a href="/aplikacje" class="nav-btn">Strona Główna →</a>
-        </div>
-    </header>
+    </nav>
 
-    <main class="main-content">
+    <div class="container-fluid">
         {% block content %}{% endblock %}
-    </main>
+    </div>
 
-    <footer class="footer">
-        <p>Projekt Robert Zioło, wykonanie +AI</p>
-        <div>
-            SHARED BASE | 
-            Apps: <span class="status-badge">✅</span> | 
-            Finance: <span class="status-badge">✅</span> | 
-            Invest: <span class="status-badge">✅</span> | 
-            Health: <span class="status-badge">✅</span>
-        </div>
-    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

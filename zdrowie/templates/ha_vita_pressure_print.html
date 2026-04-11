@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Pomiary Ciśnienia - Wydruk</title>
+    <style>
+        body { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 11px; margin: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #333; padding: 5px; text-align: center; }
+        th { background-color: #f2f2f2; }
+        .header { text-align: center; margin-bottom: 20px; }
+        @media print { .no-print { display: none; } }
+    </style>
+</head>
+<body onload="window.print()">
+    <div class="header">
+        <h2>Dzienniczek Pomiarów Ciśnienia</h2>
+        <p>Wygenerowano: {{ now.strftime('%d.%m.%Y %H:%M') }}</p>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Godzina</th>
+                <th>Skurczowe</th>
+                <th>Rozkurczowe</th>
+                <th>Puls</th>
+                <th>Waga (kg)</th>
+                <th>Zewn. (hPa)</th>
+                <th>Uwagi</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+            <tr>
+                <td>{{ row.Date.strftime('%d.%m.%Y') }}</td>
+                <td>{{ row.Date.strftime('%H:%M') }}</td>
+                <td><strong>{{ row.P_skurczowe }}</strong></td>
+                <td><strong>{{ row.P_rozkurczowe }}</strong></td>
+                <td>{{ row.Puls }}</td>
+                <td>{{ row.waga_pl }}</td>
+                <td>{{ row['atmosf.'] }}</td>
+                <td style="text-align: left;">{{ row.uwagi }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="no-print" style="margin-top: 20px; text-align: center;">
+        <button onclick="window.print()">Drukuj ponownie</button>
+        <button onclick="window.close()">Zamknij</button>
+    </div>
+</body>
+</html>

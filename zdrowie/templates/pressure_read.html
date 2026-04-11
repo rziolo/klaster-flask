@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white d-flex justify-content-between">
+            <h3 class="mb-0">Szczegóły pomiaru</h3>
+            <a href="{{ url_for('pressure_list') }}" class="btn btn-light btn-sm">Powrót</a>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Data:</strong> {{ row.Date }}</p>
+                    <p><strong>Ciśnienie:</strong> {{ row.P_skurczowe }} / {{ row.P_rozkurczowe }} mmHg</p>
+                    <p><strong>Puls:</strong> {{ row.Puls }} bpm</p>
+                    <p><strong>Waga:</strong> {{ row.waga }} kg</p>
+                </div>
+                <div class="col-md-6 border-start">
+                    <p><strong>Lokalizacja:</strong> {{ row.miasto }}</p>
+                    <p><strong>Pogoda:</strong> {{ row['atmosf.'] }} hPa, {{ row.temperatura }}°C, {{ row.wilgotnosc }}%</p>
+                    <p><strong>Uwagi:</strong><br>{{ row.uwagi }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

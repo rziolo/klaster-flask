@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <a href="{{ url_for('pressure_list') }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left"></i> Anuluj</a>
+        <h2 class="h4 mb-0">Edycja pomiaru</h2>
+        <button type="submit" form="updateForm" class="btn btn-warning btn-sm px-4">Zapisz zmiany</button>
+    </div>
+
+    <form id="updateForm" method="POST" class="bg-white p-4 border rounded shadow-sm">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label small fw-bold">Data</label>
+                <input type="datetime-local" name="Date" value="{{ row.Date_iso }}" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label small fw-bold">Skurczowe (SYS)</label>
+                <input type="number" name="P_skurczowe" value="{{ row.P_skurczowe }}" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label small fw-bold">Waga (kg)</label>
+                <input type="text" name="waga" value="{{ row.waga }}" class="form-control">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label small fw-bold">Miasto</label>
+                <input type="text" name="miasto" value="{{ row.miasto }}" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label small fw-bold">Rozkurczowe (DIA)</label>
+                <input type="number" name="P_rozkurczowe" value="{{ row.P_rozkurczowe }}" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label small fw-bold">Puls</label>
+                <input type="number" name="Puls" value="{{ row.Puls }}" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label small fw-bold">Ciśnienie zew. (hPa)</label>
+                <input type="number" name="atmosf" value="{{ row['atmosf.'] }}" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label small fw-bold">Temperatura (°C)</label>
+                <input type="number" name="temperatura" value="{{ row.temperatura }}" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label small fw-bold">Wilgotność (%)</label>
+                <input type="number" name="wilgotnosc" value="{{ row.wilgotnosc }}" class="form-control" required>
+            </div>
+            <div class="col-12">
+                <label class="form-label small fw-bold">Uwagi</label>
+                <textarea name="uwagi" rows="3" class="form-control">{{ row.uwagi }}</textarea>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

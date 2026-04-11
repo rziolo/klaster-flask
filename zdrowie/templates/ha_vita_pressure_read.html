@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card shadow">
+    <div class="card-header bg-primary text-white"><h4>Szczegóły pomiaru #{{ row.id_ha_fit }}</h4></div>
+    <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"><strong>Data:</strong> {{ row.Date.strftime('%d.%m.%Y %H:%M') }}</li>
+            <li class="list-group-item"><strong>Ciśnienie:</strong> {{ row.P_skurczowe }} / {{ row.P_rozkurczowe }} mmHg</li>
+            <li class="list-group-item"><strong>Puls:</strong> {{ row.Puls }} bpm</li>
+            <li class="list-group-item"><strong>Waga:</strong> {{ row.waga }} kg</li>
+            <li class="list-group-item"><strong>Pogoda:</strong> {{ row.miasto }} ({{ row['atmosf.'] }} hPa, {{ row.temperatura }}℃)</li>
+            <li class="list-group-item"><strong>Uwagi:</strong> {{ row.uwagi }}</li>
+        </ul>
+    </div>
+    <div class="card-footer">
+        <a href="{{ url_for('pressure_list') }}" class="btn btn-secondary">Powrót</a>
+    </div>
+</div>
+{% endblock %}

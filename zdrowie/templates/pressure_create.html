@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <a href="{{ url_for('pressure_list') }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left"></i> Powrót</a>
+        <h2 class="h4 mb-0">Nowy wpis ciśnienia</h2>
+        <button type="submit" form="pressureForm" class="btn btn-success btn-sm px-4">Zapisz</button>
+    </div>
+
+    <div class="p-3 mb-4 border rounded shadow-sm d-flex justify-content-between align-items-center" style="background-color: #e9ecef;">
+        <div>
+            <span class="fw-bold">Lokalizacja:</span> <span id="locality">{{ locality }}</span>
+            <span class="ms-4 text-muted">
+                {% if weather %}
+                    {{ weather.pressure }} hPa, {{ weather.temp }} °C, {{ weather.humidity }} %
+                {% endif %}
+            </span>
+        </div>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="copyValues()">
+            Wprowadź <i class="fas fa-arrow-down"></i>
+        </button>
+    </div>
+
+    <form id="pressureForm" method="POST" class="bg-white p-2">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label small fw-bold">Data</label>
+                <input type="datetime-local" name="Date" value="{{ current_time }}" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label small fw-bold">Skurczowe (SYS)</label>
+                <input type="number" name="P_skurczowe" placeholder="mmHg" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label small fw-bold">Waga</label>
+                <input type="text" name="waga" placeholder="kg" class="form-control">
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label small fw-bold">Miasto</label>
+                <input type="text" id="miasto" name="miasto" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label small fw-bold">Rozkurczowe (DIA)</label>
+                <input type="number" name="P_rozkurczowe" placeholder="mmHg" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label small fw-bold">Puls</label>
+                <input type="number" name="Puls" placeholder="bpm" class="form-control" required>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label small fw-bold">Ciśnienie zew.</label>
+                <input type="number" id="atmosf" name="atmosf" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label small fw-bold">Temperatura</label>
+                <input type="number" id="temperatura" name="temperatura" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label small fw-bold">Wilgotność</label>
+                <input type="number" id="wilgotnosc" name="wilgotnosc" class="form-control" required>
+            </div>
+
+            <div class="col-12">
+                <textarea name="uwagi" rows="3" class="form-control" placeholder="Uwagi"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    function copyValues() {
+        const locality = document.getElementById("locality").textContent;
+        const weather = {{ weather | tojson }};
+        if (weather) {
+            document.getElementById("miasto").value = locality;
+            document.getElementById("atmosf").value = weather.pressure;
+            document.getElementById("temperatura").value = weather.temp;
+            document.getElementById("wilgotnosc").value = weather.humidity;
+        }
+    }
+</script>
+{% endblock %}
