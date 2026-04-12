@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-3">
+    <div class="card shadow-sm border-primary">
+        <div class="card-header bg-primary text-white py-2"><strong>Edytuj Dane Dzienne (ID: {{ row.id_dane_dzienne }})</strong></div>
+        <div class="card-body">
+            <form method="POST">
+                <div class="row g-2 mb-3">
+                    <div class="col-md-4"><label class="small fw-bold">Data</label><input type="date" name="data" class="form-control form-control-sm" value="{{ row.data }}" required></div>
+                    <div class="col-md-4"><label class="small fw-bold">Wartość</label><input type="text" name="wartosc" class="form-control form-control-sm" value="{{ row.wartosc }}" required></div>
+                    <div class="col-md-4"><label class="small fw-bold">Wkład</label><input type="text" name="wklad" class="form-control form-control-sm" value="{{ row.wklad }}" required></div>
+                </div>
+                <div class="row g-2 mb-3">
+                    <div class="col-md-3"><label class="small text-success fw-bold">H Ilość</label><input type="number" name="h_ilosc" class="form-control form-control-sm" value="{{ row.H_ilosc }}"></div>
+                    <div class="col-md-3"><label class="small text-success fw-bold">H Vol</label><input type="number" name="h_vol" class="form-control form-control-sm" value="{{ row.H_vol }}"></div>
+                    <div class="col-md-3"><label class="small text-danger fw-bold">L Ilość</label><input type="number" name="l_ilosc" class="form-control form-control-sm" value="{{ row.L_ilosc }}"></div>
+                    <div class="col-md-3"><label class="small text-danger fw-bold">L Vol</label><input type="number" name="l_vol" class="form-control form-control-sm" value="{{ row.L_vol }}"></div>
+                </div>
+                <div class="row g-2 mb-3">
+                    <div class="col-md-4"><label class="small fw-bold">Turnover</label><input type="number" name="turnover" class="form-control form-control-sm" value="{{ row.turnover }}"></div>
+                    <div class="col-md-4"><label class="small fw-bold">HL</label><input type="number" name="hl" class="form-control form-control-sm" value="{{ row.HL }}"></div>
+                    <div class="col-md-4"><label class="small fw-bold">NL</label><input type="number" name="nl" class="form-control form-control-sm" value="{{ row.NL }}"></div>
+                </div>
+                <div class="text-end mt-3">
+                    <a href="/inwestycje/dane_dzienne" class="btn btn-secondary btn-sm">Anuluj</a>
+                    <button type="submit" class="btn btn-primary btn-sm">Zapisz zmiany</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

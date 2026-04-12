@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-3">
+    <div class="card shadow-sm border-success">
+        <div class="card-header bg-success text-white py-2"><strong><i class="fas fa-plus"></i> Nowy wpis w bazie danych</strong></div>
+        <div class="card-body bg-light">
+            <form method="POST">
+                <div class="row g-2 mb-3">
+                    <div class="col-md-3">
+                        <label class="small fw-bold">Ticker</label>
+                        <select name="ticker" class="form-select form-select-sm" required>
+                            {% for t in tickers %}
+                            <option value="{{ t.ticker_name }}">{{ t.ticker_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="small fw-bold">Data</label>
+                        <input type="date" name="data" class="form-control form-control-sm" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="small fw-bold">ISIN</label>
+                        <input type="text" name="isin" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="small fw-bold">Waluta</label>
+                        <input type="text" name="waluta" class="form-control form-control-sm" value="PLN" required>
+                    </div>
+                </div>
+                <div class="row g-2 mb-3">
+                    <div class="col-md-3">
+                        <label class="small fw-bold">Open</label>
+                        <input type="text" name="open" class="form-control form-control-sm" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="small fw-bold">Max</label>
+                        <input type="text" name="max" class="form-control form-control-sm" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="small fw-bold">Min</label>
+                        <input type="text" name="min" class="form-control form-control-sm" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="small fw-bold">Close</label>
+                        <input type="text" name="close" class="form-control form-control-sm" required>
+                    </div>
+                </div>
+                <div class="row g-2 mb-3">
+                    <div class="col-md-3">
+                        <label class="small fw-bold">Zmiana (Wartość)</label>
+                        <input type="text" name="zmiana" class="form-control form-control-sm" value="0.000">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="small fw-bold">Volume</label>
+                        <input type="number" name="volume" class="form-control form-control-sm" value="0">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="small fw-bold">Liczba transakcji</label>
+                        <input type="number" name="number_transactions" class="form-control form-control-sm" value="0">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="small fw-bold">Turnover (Obrót)</label>
+                        <input type="text" name="turnover" class="form-control form-control-sm" value="0.00">
+                    </div>
+                </div>
+                <div class="text-end">
+                    <a href="/inwestycje/dane" class="btn btn-secondary btn-sm">Anuluj</a>
+                    <button type="submit" class="btn btn-success btn-sm">Zapisz do bazy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-3">
+    <div class="card shadow-sm border-secondary">
+        <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+            <strong><i class="fas fa-eye"></i> Szczegóły wpisu: {{ row.ticker }} ({{ row.data }})</strong>
+            <a href="/inwestycje/dane" class="btn btn-light btn-sm">Zamknij</a>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <table class="table table-sm">
+                        <tr><th class="bg-light">Ticker</th><td>{{ row.ticker }}</td></tr>
+                        <tr><th class="bg-light">Data</th><td>{{ row.data }}</td></tr>
+                        <tr><th class="bg-light">ISIN</th><td>{{ row.ISIN }}</td></tr>
+                        <tr><th class="bg-light">Waluta</th><td>{{ row.waluta }}</td></tr>
+                        <tr><th class="bg-light">Zmiana</th><td>{{ row.zmiana }}</td></tr>
+                    </table>
+                </div>
+                <div class="col-md-6">
+                    <table class="table table-sm">
+                        <tr><th class="bg-light">Open</th><td>{{ row.open }}</td></tr>
+                        <tr><th class="bg-light">Max</th><td>{{ row.max }}</td></tr>
+                        <tr><th class="bg-light">Min</th><td>{{ row.min }}</td></tr>
+                        <tr><th class="bg-light">Close</th><td>{{ row.close }}</td></tr>
+                        <tr><th class="bg-light">Volume</th><td>{{ row.volume }}</td></tr>
+                    </table>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Liczba transakcji:</strong> {{ row.number_transactions }}</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <p><strong>Obrót (Turnover):</strong> {{ row.turnover }} {{ row.waluta }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-end">
+            <a href="/inwestycje/dane/edit/{{ row.id_dane }}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i> Edytuj ten wpis</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

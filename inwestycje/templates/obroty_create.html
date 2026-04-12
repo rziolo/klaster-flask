@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2><i class="fas fa-plus-circle text-success"></i> Nowy wpis - Obroty</h2>
+        <a href="/inwestycje/obroty" class="btn btn-outline-secondary btn-sm">
+            <i class="fas fa-arrow-left"></i> Powrót
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body bg-white">
+            <form action="/inwestycje/obroty/create" method="POST">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="ticker_nm" class="form-label">Ticker (instrument)</label>
+                        <select class="form-select form-select-sm" name="ticker_nm" id="ticker_nm" required>
+                            <option value="" selected disabled>Wybierz ticker...</option>
+                            {% for t in tickers %}
+                            <option value="{{ t.ticker_name }}">{{ t.ticker_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="zakup_data" class="form-label">Data zakupu</label>
+                        <input type="date" class="form-control form-control-sm" name="zakup_data" id="zakup_data" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="zakup_cena" class="form-label">Cena zakupu</label>
+                        <input type="text" class="form-control form-control-sm" name="zakup_cena" id="zakup_cena" placeholder="np. 123.45" required>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="zakup_ilosc" class="form-label">Ilość</label>
+                        <input type="number" class="form-control form-control-sm" name="zakup_ilosc" id="zakup_ilosc" required>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="platforma" class="form-label">Platforma</label>
+                        <input type="text" class="form-control form-control-sm" name="platforma" id="platforma" placeholder="np. BOSSA, XTB">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="uwagi" class="form-label">Uwagi</label>
+                    <textarea class="form-control form-control-sm" name="uwagi" id="uwagi" rows="2"></textarea>
+                </div>
+
+                <div class="text-end border-top pt-3">
+                    <button type="submit" class="btn btn-success btn-sm">
+                        <i class="fas fa-save"></i> Zapisz transakcję
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid mt-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2><i class="fas fa-database text-secondary"></i> Dane Giełdowe</h2>
+        <div class="btn-group">
+            <a href="/inwestycje" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left"></i> Powrót</a>
+            <a href="/inwestycje/dane/create" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Dodaj wpis</a>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-sm table-hover table-bordered bg-white" style="font-size: 0.75rem;">
+            <thead class="table-dark text-center">
+                <tr>
+                    <th>Data</th>
+                    <th>Ticker</th>
+                    <th>Wal</th>
+                    <th>Open</th>
+                    <th>Max</th>
+                    <th>Min</th>
+                    <th>Close</th>
+                    <th>Zmiana</th>
+                    <th>Volume</th>
+                    <th>Trans.</th>
+                    <th>Turnover</th>
+                    <th>Opcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                <tr>
+                    <td class="text-center">{{ row.data }}</td>
+                    <td class="text-center fw-bold">{{ row.ticker }}</td>
+                    <td class="text-center small">{{ row.waluta }}</td>
+                    <td class="text-end">{{ "{:,.3f}".format(row.open).replace(".", ",") }}</td>
+                    <td class="text-end">{{ "{:,.3f}".format(row.max).replace(".", ",") }}</td>
+                    <td class="text-end">{{ "{:,.3f}".format(row.min).replace(".", ",") }}</td>
+                    <td class="text-end fw-bold">{{ "{:,.3f}".format(row.close).replace(".", ",") }}</td>
+                    <td class="text-end {{ 'text-success' if row.zmiana > 0 else 'text-danger' if row.zmiana < 0 else '' }}">
+                        {{ "{:,.3f}".format(row.zmiana).replace(".", ",") }}
+                    </td>
+                    <td class="text-end text-muted">{{ row.volume }}</td>
+                    <td class="text-end text-muted">{{ row.number_transactions }}</td>
+                    <td class="text-end">{{ "{:,.2f}".format(row.turnover).replace(".", ",") }}</td>
+                    <td class="text-center">
+                        <div class="btn-group btn-group-sm">
+                            <a href="/inwestycje/dane/view/{{ row.id_dane }}" class="btn btn-outline-secondary" title="Podgląd"><i class="fas fa-eye"></i></a>
+                            <a href="/inwestycje/dane/edit/{{ row.id_dane }}" class="btn btn-outline-primary" title="Edytuj"><i class="fas fa-edit"></i></a>
+                            <a href="/inwestycje/dane/delete/{{ row.id_dane }}" class="btn btn-outline-danger" onclick="return confirm('Usunąć?')"><i class="fas fa-trash"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

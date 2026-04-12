@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2><i class="fas fa-tags text-warning"></i> Słownik Tickerów</h2>
+        <div class="btn-group">
+            <a href="/inwestycje" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left"></i> Powrót</a>
+            <a href="/inwestycje/ticker/create" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Dodaj ticker</a>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-sm table-hover table-bordered bg-white">
+            <thead class="table-dark text-center">
+                <tr>
+                    <th>ID</th>
+                    <th>Nazwa (Ticker)</th>
+                    <th>Rynek</th>
+                    <th>Rating</th>
+                    <th>Altman</th>
+                    <th>Opcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                <tr class="text-center">
+                    <td class="text-muted">{{ row.id_ticker }}</td>
+                    <td class="fw-bold">{{ row.ticker_name }}</td>
+                    <td><span class="badge bg-light text-dark border">{{ row.market }}</span></td>
+                    <td>
+                        {% if row.rating %}
+                        <span class="badge {{ 'bg-success' if 'A' in row.rating else 'bg-warning text-dark' if 'B' in row.rating else 'bg-danger' }}">
+                            {{ row.rating }}
+                        </span>
+                        {% endif %}
+                    </td>
+                    <td>{{ row.altman if row.altman else '-' }}</td>
+                    <td>
+                        <div class="btn-group btn-group-sm">
+                            <a href="/inwestycje/ticker/edit/{{ row.id_ticker }}" class="btn btn-outline-primary"><i class="fas fa-edit"></i></a>
+                            <a href="/inwestycje/ticker/delete/{{ row.id_ticker }}" class="btn btn-outline-danger" onclick="return confirm('Usunąć ticker {{ row.ticker_name }}?')"><i class="fas fa-trash"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

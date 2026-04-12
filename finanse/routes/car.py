@@ -1,46 +1,48 @@
-from flask import Blueprint, render_template, current_app
+from flask import render_template
 from decimal import Decimal
-from datetime import datetime
 
-car_bp = Blueprint('car', __name__)
+def register_routes(app):
+    @app.route('/finanse/car')
+    def car_view():
+        try:
+            cur = app.mysql.connection.cursor()
+            # Pobieramy chronologicznie (ASC), aby móc odjąć licznik poprzedni od obecnego
+            query = "SELECT data, car_km, car_cost FROM wydatki WHERE car_km > 0 ORDER BY data ASC"
+            cur.execute(query)
+            rows = cur.fetchall()
+            cur.close()
 
-def format_polish(value):
-    if isinstance(value, (int, float, Decimal)):
-        s = f"{value:,.2f}"
-        return s.replace(',', 'XXX').replace('.', ',').replace('XXX', ' ')
-    return value
+            def format_pl(value):
+                if isinstance(value, (int, float, Decimal)):
+                    return f"{value:,.2f}".replace(',', ' ').replace('.', ',')
+                return "0,00"
 
-def format_thousands(n):
-    return '{:,}'.format(int(n)).replace(',', ' ') if n is not None else '0'
+            processed_data = []
+            prev_km = None
 
-@car_bp.route('/')
-def car_view():
-    try:
-        cur = car_bp.mysql.connection.cursor()
-        cur.execute("SELECT data, car_cost, car_km FROM wydatki WHERE car_km > 0 ORDER BY data ASC")
-        rows_raw = cur.fetchall()
-        cur.close()
+            for row in rows:
+                curr_km = row.get('car_km') or 0
+                cost = row.get('car_cost') or 0
+                
+                # Obliczanie przebiegu (obecny licznik - poprzedni)
+                przebieg = (curr_km - prev_km) if prev_km is not None else 0
+                
+                # Obliczanie kosztu na km (suma kosztów w miesiącu / przebieg w miesiącu)
+                koszt_na_km = (cost / przebieg) if przebieg > 0 else 0
 
-        result = []
-        prev_km = None
-        for row in rows_raw:
-            curr_km = int(row['car_km'])
-            cost = Decimal(str(row['car_cost'] or 0))
-            przebieg = curr_km - prev_km if prev_km is not None else 0
-            cost_per_km = (cost / Decimal(przebieg)) if przebieg > 0 else Decimal('0.00')
+                processed_data.append({
+                    'miesiac': row.get('data'),
+                    'koszt_zl': format_pl(cost),
+                    'licznik': f"{curr_km:,}".replace(',', ' '),
+                    'poprzedni': f"{prev_km:,}".replace(',', ' ') if prev_km else "---",
+                    'przebieg': f"{przebieg:,}".replace(',', ' ') if przebieg > 0 else "---",
+                    'koszt_na_km': format_pl(koszt_na_km) if koszt_na_km > 0 else "---"
+                })
+                prev_km = curr_km
 
-            result.append({
-                'data': str(row['data'])[:7],
-                'car_cost': format_polish(cost),
-                'car_km': format_thousands(curr_km),
-                'car_km_wczesniej': format_thousands(prev_km),
-                'przebieg': format_thousands(przebieg),
-                'cost_month': format_polish(cost_per_km)
-            })
-            prev_km = curr_km
+            # Odwracamy listę: najnowsze daty na górę
+            processed_data.reverse()
 
-        result.reverse()
-        return render_template('car.html', rows=result)
-    except Exception as e:
-        print("Błąd car:", e)
-        return render_template('car.html', rows=[])
+            return render_template('car.html', rows=processed_data)
+        except Exception as e:
+            return f"Błąd bazy danych (Car): {e}", 500

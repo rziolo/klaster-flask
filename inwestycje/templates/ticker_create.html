@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-3" style="max-width: 600px;">
+    <div class="card shadow-sm border-success">
+        <div class="card-header bg-success text-white py-2"><strong>Dodaj nowy Ticker</strong></div>
+        <div class="card-body">
+            <form method="POST">
+                <div class="mb-3">
+                    <label class="small fw-bold">Nazwa spółki / Ticker</label>
+                    <input type="text" name="ticker_name" class="form-control form-control-sm" placeholder="np. PKOBP" required>
+                </div>
+                <div class="mb-3">
+                    <label class="small fw-bold">Rynek</label>
+                    <select name="market" class="form-select form-select-sm">
+                        <option value="GPW">GPW</option>
+                        <option value="NC">NewConnect</option>
+                        <option value="ZAGR">Zagranica</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <label class="small fw-bold">Rating</label>
+                        <input type="text" name="rating" class="form-control form-control-sm" placeholder="np. AAA">
+                    </div>
+                    <div class="col-6 mb-3">
+                        <label class="small fw-bold">Altman (Z-Score)</label>
+                        <input type="text" name="altman" class="form-control form-control-sm" placeholder="np. 2.5">
+                    </div>
+                </div>
+                <div class="text-end">
+                    <a href="/inwestycje/ticker" class="btn btn-secondary btn-sm">Anuluj</a>
+                    <button type="submit" class="btn btn-success btn-sm">Zapisz Ticker</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

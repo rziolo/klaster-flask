@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2><i class="fas fa-edit text-primary"></i> Edytuj wpis #{{ row.id_obroty }}</h2>
+        <a href="/inwestycje/obroty" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left"></i> Powrót</a>
+    </div>
+    <div class="card shadow-sm"><div class="card-body bg-white">
+        <form method="POST">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Ticker</label>
+                    <select class="form-select form-select-sm" name="ticker_nm">
+                        {% for t in tickers %}
+                        <option value="{{ t.ticker_name }}" {% if t.ticker_name == row.ticker_nm %}selected{% endif %}>{{ t.ticker_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Data zakupu</label>
+                    <input type="date" class="form-control form-control-sm" name="zakup_data" value="{{ row.zakup_data }}" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Cena zakupu</label>
+                    <input type="text" class="form-control form-control-sm" name="zakup_cena" value="{{ row.zakup_cena }}" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Ilość</label>
+                    <input type="number" class="form-control form-control-sm" name="zakup_ilosc" value="{{ row.zakup_ilosc }}" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Platforma</label>
+                    <input type="text" class="form-control form-control-sm" name="platforma" value="{{ row.platforma }}">
+                </div>
+            </div>
+            <div class="row border-top pt-3 mt-2">
+                <div class="col-md-6 mb-3 text-danger">
+                    <label class="form-label">Data sprzedaży (opcjonalnie)</label>
+                    <input type="date" class="form-control form-control-sm border-danger" name="sprzedaz_data" value="{{ row.sprzedaz_data if row.sprzedaz_data else '' }}">
+                </div>
+                <div class="col-md-6 mb-3 text-danger">
+                    <label class="form-label">Cena sprzedaży (opcjonalnie)</label>
+                    <input type="text" class="form-control form-control-sm border-danger" name="sprzedaz_cena" value="{{ row.sprzedaz_cena if row.sprzedaz_cena else '' }}">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Uwagi</label>
+                <textarea class="form-control form-control-sm" name="uwagi" rows="2">{{ row.uwagi }}</textarea>
+            </div>
+            <div class="text-end border-top pt-3">
+                <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-save"></i> Zapisz zmiany</button>
+            </div>
+        </form>
+    </div></div>
+</div>
+{% endblock %}

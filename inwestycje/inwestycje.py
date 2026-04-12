@@ -1,35 +1,61 @@
-import os
-from flask import Flask, render_template
-from dotenv import load_dotenv
-import mysql.connector
+from flask import render_template, request, redirect, url_for
+from datetime import datetime
+import utils  # Importujemy zaktualizowany utils.py
 
-load_dotenv()
+def register_routes(app):
+    @app.route('/inwestycje')
+    def inwestycje_index():
+        try:
+            stats = utils.get_db_status(app.mysql)
+            return render_template('index.html', 
+                                 s=stats, 
+                                 today=str(datetime.now().date()),
+                                 tytul_aplikacji='Portfel Inwestycyjny')
+        except Exception as e:
+            return f"Błąd modułu inwestycji: {e}", 500
 
-# Pełna ścieżka bezwzględna rozwiązuje problem TemplateNotFound
-app = Flask(__name__, template_folder='/var/www/html/flask/aplikacja/templates')
+    @app.route('/inwestycje/obroty')
+    def obroty_list():
+        cur = app.mysql.connection.cursor()
+        cur.execute("SELECT * FROM obroty ORDER BY zakup_data DESC")
+        rows = cur.fetchall()
+        cur.close()
+        return render_template('obroty.html', rows=rows)
 
-def get_db_connection():
-    return mysql.connector.connect(
-        host=os.getenv('DB_HOST'),
-        user=os.getenv('DB_USER'),
-        password=os.getenv('DB_PASSWORD'),
-        database=os.getenv('DB_NAME'),
-        ssl_disabled=True
-    )
+    @app.route('/inwestycje/ticker')
+    def ticker_list():
+        cur = app.mysql.connection.cursor()
+        cur.execute("SELECT * FROM ticker ORDER BY ticker_name ASC")
+        rows = cur.fetchall()
+        cur.close()
+        return render_template('ticker.html', rows=rows)
 
-@app.route('/inwestycje')  # <--- TUTAJ BYŁ BŁĄD (było /finanse)
-def index():
-    db_status = False
-    try:
-        conn = get_db_connection()
-        if conn.is_connected():
-            db_status = True
-        conn.close()
-    except Exception as e:
-        print(f"Błąd połączenia: {e}")
-        db_status = False
+    @app.route('/inwestycje/dane')
+    def dane_list():
+        cur = app.mysql.connection.cursor()
+        cur.execute("SELECT * FROM dane ORDER BY data DESC LIMIT 100")
+        rows = cur.fetchall()
+        cur.close()
+        return render_template('dane.html', rows=rows)
 
-    return render_template('index_inwestycje.html', db_connected=db_status)
+    @app.route('/inwestycje/dane_dzienne')
+    def dane_dzienne_list():
+        cur = app.mysql.connection.cursor()
+        cur.execute("SELECT * FROM dane_dzienne ORDER BY data DESC LIMIT 100")
+        rows = cur.fetchall()
+        cur.close()
+        return render_template('dane_dzienne.html', rows=rows)
 
-if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5002)
+    @app.route('/inwestycje/platforma')
+    def platforma_list():
+        cur = app.mysql.connection.cursor()
+        cur.execute("SELECT * FROM platforma")
+        rows = cur.fetchall()
+        cur.close()
+        return render_template('platforma.html', rows=rows)
+
+    @app.route('/inwestycje/get_csv_preview/<filename>')
+    def get_csv_preview(filename):
+        # Wywołujemy faktyczną funkcję podglądu z utils.py
+        # Ograniczamy podgląd do pierwszych 15 wierszy
+        return utils.get_csv_preview_html(filename, limit=15)

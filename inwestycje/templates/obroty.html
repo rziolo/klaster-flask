@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid mt-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>
+            <i class="fas fa-history text-primary"></i> 
+            {% if widok == 'biezace' %}Pozycje Bieżące{% else %}Historia obrotów{% endif %}
+        </h2>
+
+        <div>
+            {% if widok == 'biezace' %}
+                <a href="/inwestycje/obroty" class="btn btn-primary btn-sm">
+                    <i class="fas fa-list"></i> Pokaż historię
+                </a>
+            {% else %}
+                <a href="/inwestycje/obroty/biezace" class="btn btn-warning btn-sm fw-bold">
+                    <i class="fas fa-chart-line"></i> BIEŻĄCE
+                </a>
+            {% endif %}
+        </div>
+
+        <div class="btn-group">
+            <a href="/inwestycje" class="btn btn-outline-secondary btn-sm">
+                <i class="fas fa-arrow-left"></i> Powrót
+            </a>
+            <a href="/inwestycje/obroty/create" class="btn btn-success btn-sm">
+                <i class="fas fa-plus"></i> Dodaj wpis
+            </a>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-sm table-hover table-bordered bg-white" style="font-size: 0.82rem;">
+            <thead class="table-dark text-center">
+                <tr>
+                    <th>ID</th>
+                    <th>Lp.</th>
+                    <th>Ticker</th>
+                    <th>Data zakupu</th>
+                    <th class="text-end">Cena zakupu</th>
+                    <th class="text-end">Ilość</th>
+                    <th>Data sprzedaży</th>
+                    <th class="text-end">Cena sprzedaży</th>
+                    <th>Platforma</th>
+                    <th><i class="fas fa-comment-dots"></i></th>
+                    <th>Opcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in obroty %}
+                <tr>
+                    <td class="text-center text-muted">{{ row.id_obroty }}</td>
+                    <td class="text-center fw-bold">{{ loop.index }}</td>
+                    <td class="text-center"><strong>{{ row.ticker_nm }}</strong></td>
+                    <td class="text-center">{{ row.zakup_data }}</td>
+                    <td class="text-end">
+                        {{ "{:,.2f}".format(row.zakup_cena).replace(",", " ").replace(".", ",").replace(" ", " ") }}
+                    </td>
+                    <td class="text-end">{{ row.zakup_ilosc }}</td>
+                    <td class="text-center">{{ row.sprzedaz_data if row.sprzedaz_data else '' }}</td>
+                    <td class="text-end">
+                        {% if row.sprzedaz_cena %}
+                            {{ "{:,.2f}".format(row.sprzedaz_cena).replace(",", " ").replace(".", ",").replace(" ", " ") }}
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        <span class="badge bg-light text-dark border" style="font-weight: normal;">{{ row.platforma }}</span>
+                    </td>
+                    <td class="text-center">
+                        {% if row.uwagi and row.uwagi.strip() %}
+                        <a href="#" class="text-secondary" data-bs-toggle="modal" data-bs-target="#modalUwagi{{ row.id_obroty }}">
+                            <i class="fas fa-comment-dots"></i>
+                        </a>
+                        <div class="modal fade" id="modalUwagi{{ row.id_obroty }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content text-start">
+                                    <div class="modal-header border-bottom-0">
+                                        <h5 class="modal-title">Uwagi - {{ row.ticker_nm }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body pt-0" style="font-size: 1rem; font-weight: normal;">
+                                        {{ row.uwagi }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        <div class="btn-group btn-group-sm">
+                            <a href="/inwestycje/obroty/view/{{ row.id_obroty }}" class="btn btn-outline-secondary"><i class="fas fa-eye"></i></a>
+                            <a href="/inwestycje/obroty/edit/{{ row.id_obroty }}" class="btn btn-outline-primary"><i class="fas fa-edit"></i></a>
+                            <a href="/inwestycje/obroty/delete/{{ row.id_obroty }}" class="btn btn-outline-danger" onclick="return confirm('Usunąć?')"><i class="fas fa-trash"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="11" class="text-center py-4 text-muted">Brak danych do wyświetlenia.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

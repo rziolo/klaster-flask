@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-3">
+    <h2 class="text-center mb-4"><i class="fas fa-chart-line text-success"></i> Portfel Inwestycyjny</h2>
+
+    <h5 class="border-bottom pb-2 mb-3">Inwestycje</h5>
+    <div class="row g-2 mb-4">
+        <div class="col-auto"><a href="/inwestycje/obroty" class="btn btn-primary">Obroty</a></div>
+        <div class="col-auto"><a href="/inwestycje/dane" class="btn btn-outline-secondary">Dane</a></div>
+        <div class="col-auto"><a href="/inwestycje/dane_dzienne" class="btn btn-outline-secondary">Dane Dzienne</a></div>
+        <div class="col-auto"><a href="/inwestycje/ticker" class="btn btn-outline-secondary">Ticker</a></div>
+        <div class="col-auto"><a href="/inwestycje/platforma" class="btn btn-outline-secondary">Platforma</a></div>
+    </div>
+
+    <h5 class="border-bottom pb-2 mb-3">Raporty i wyliczenia</h5>
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body p-0">
+            <table class="table table-sm table-bordered mb-0">
+                <tr>
+                    <td class="bg-light text-end pe-3" style="width: 200px;">Spółek w portfelu:</td>
+                    <td class="ps-3">
+                        <span class="badge bg-primary fs-6">{{ s.active_ticker }}</span>
+                    </td>
+                    <td class="table-secondary"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <h5 class="border-bottom pb-2 mb-3">ETL</h5>
+    
+    <div class="card mb-4">
+        <div class="card-header py-1 bg-light text-uppercase small"><strong>Aktualność danych w mojej bazie</strong></div>
+        <div class="card-body p-0">
+            <table class="table table-sm table-bordered mb-0">
+                <tr>
+                    <td class="bg-light text-end pe-3" style="width: 1%; white-space: nowrap;">dane spółek</td>
+                    <td class="text-start ps-3 pe-3" style="width: 1%; white-space: nowrap; background-color: {{ 'green' if s.data_dane == today else 'red' }}; color: white;">{{ s.data_dane }}</td>
+                    <td class="table-secondary"></td>
+                    <td class="bg-light text-end pe-3" style="width: 1%; white-space: nowrap;">dane dzienne</td>
+                    <td class="text-start ps-3 pe-3" style="width: 1%; white-space: nowrap; background-color: {{ 'green' if s.data_dane_dzienne == today else 'red' }}; color: white;">{{ s.data_dane_dzienne }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header py-1 bg-light text-uppercase small"><strong>Aktualność danych z importu</strong></div>
+        <div class="card-body p-0">
+            <table class="table table-sm table-bordered mb-0 text-center">
+                <thead class="table-secondary small">
+                    <tr>
+                        <th width="20%">GPW</th>
+                        <th width="20%">GPW-NC</th>
+                        <th width="20%">Zagraniczne</th>
+                        <th width="20%">Statystyki</th>
+                        <th width="20%">Nowe spółki</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="background-color: {{ 'green' if s.data_import_gpw == today else 'red' }}; color: white;">{{ s.data_import_gpw }}</td>
+                        <td style="background-color: {{ 'green' if s.data_import_gpw_nc == today else 'red' }}; color: white;">{{ s.data_import_gpw_nc }}</td>
+                        <td style="background-color: {{ 'green' if s.data_import_zagr == today else 'red' }}; color: white;">{{ s.data_import_zagr }}</td>
+                        <td style="background-color: {{ 'green' if s.data_import_stooq == today else 'red' }}; color: white;">{{ s.data_import_stooq }}</td>
+                        <td style="background-color: {{ 'green' if s.gpw_nowe == 'brak' else 'red' }}; color: white;">{{ s.gpw_nowe }}</td>
+                    </tr>
+                    <tr class="small">
+                        <td><a href="https://www.gpw.pl/archiwum-notowan" target="_blank">notowania GPW</a></td>
+                        <td><a href="https://newconnect.pl/notowania" target="_blank">notowania GPW-NC</a></td>
+                        <td><a href="https://www.investing.com/portfolio/" target="_blank">notowania zagraniczne</a></td>
+                        <td><a href="https://stooq.pl/t/s/?m=plws" target="_blank">Statystyki Stooq</a></td>
+                        <td class="text-muted">w budowie</td>
+                    </tr>
+                    <tr class="small text-muted">
+                        <td><a href="javascript:void(0)" onclick="openPreview('import_gpw.csv')">podgląd</a></td>
+                        <td><a href="javascript:void(0)" onclick="openPreview('import_gpw_nc.csv')">podgląd</a></td>
+                        <td><a href="javascript:void(0)" onclick="openPreview('import_zagr.csv')">podgląd</a></td>
+                        <td><a href="javascript:void(0)" onclick="openPreview('import_stooq.csv')">podgląd</a></td>
+                        <td>w budowie</td>
+                    </tr>
+                    <tr>
+                        <td><button class="btn btn-xs btn-outline-warning disabled" style="font-size: 0.7rem;">Importuj</button></td>
+                        <td><button class="btn btn-xs btn-outline-warning disabled" style="font-size: 0.7rem;">Importuj</button></td>
+                        <td><button class="btn btn-xs btn-outline-warning disabled" style="font-size: 0.7rem;">Importuj</button></td>
+                        <td><button class="btn btn-xs btn-outline-warning disabled" style="font-size: 0.7rem;">Importuj</button></td>
+                        <td><span class="badge text-bg-light border small" style="font-weight: normal;">w budowie</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="csvModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header py-2">
+                <h5 class="modal-title" id="modalTitle" style="font-weight: normal;">Podgląd pliku</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-0" id="modalBody" style="max-height: 70vh; overflow-y: auto;">
+                <style>
+                    #modalBody table th { font-weight: normal !important; background-color: #f8f9fa; }
+                </style>
+                <div class="text-center p-4 spinner-container"><div class="spinner-border text-primary"></div></div>
+                <div id="csvContent"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let myModal = null;
+function openPreview(filename) {
+    if(!myModal) { myModal = new bootstrap.Modal(document.getElementById('csvModal')); }
+    const title = document.getElementById('modalTitle');
+    const content = document.getElementById('csvContent');
+    const spinner = document.querySelector('.spinner-container');
+    title.innerText = 'Podgląd: ' + filename;
+    content.innerHTML = '';
+    spinner.style.display = 'block';
+    myModal.show();
+    fetch('/inwestycje/get_csv_preview/' + filename)
+        .then(response => response.text())
+        .then(html => {
+            spinner.style.display = 'none';
+            content.innerHTML = html;
+        })
+        .catch(err => {
+            spinner.style.display = 'none';
+            content.innerHTML = '<div class="alert alert-danger m-3">Błąd ładowania danych.</div>';
+        });
+}
+</script>
+{% endblock %}

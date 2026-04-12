@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-3">
+    <div class="card shadow-sm border-success">
+        <div class="card-header bg-success text-white py-2"><strong>Dodaj Dane Dzienne</strong></div>
+        <div class="card-body">
+            <form method="POST">
+                <div class="row g-2 mb-3">
+                    <div class="col-md-4"><label class="small">Data</label><input type="date" name="data" class="form-control form-control-sm" required></div>
+                    <div class="col-md-4"><label class="small">Wartość</label><input type="text" name="wartosc" class="form-control form-control-sm" required></div>
+                    <div class="col-md-4"><label class="small">Wkład</label><input type="text" name="wklad" class="form-control form-control-sm" required></div>
+                </div>
+                <div class="row g-2 mb-3">
+                    <div class="col-md-3"><label class="small text-success">H Ilość</label><input type="number" name="h_ilosc" class="form-control form-control-sm" value="0"></div>
+                    <div class="col-md-3"><label class="small text-success">H Vol</label><input type="number" name="h_vol" class="form-control form-control-sm" value="0"></div>
+                    <div class="col-md-3"><label class="small text-danger">L Ilość</label><input type="number" name="l_ilosc" class="form-control form-control-sm" value="0"></div>
+                    <div class="col-md-3"><label class="small text-danger">L Vol</label><input type="number" name="l_vol" class="form-control form-control-sm" value="0"></div>
+                </div>
+                <div class="row g-2 mb-3">
+                    <div class="col-md-4"><label class="small">Turnover</label><input type="number" name="turnover" class="form-control form-control-sm" value="0"></div>
+                    <div class="col-md-4"><label class="small">HL</label><input type="number" name="hl" class="form-control form-control-sm" value="0"></div>
+                    <div class="col-md-4"><label class="small">NL</label><input type="number" name="nl" class="form-control form-control-sm" value="0"></div>
+                </div>
+                <div class="text-end mt-3">
+                    <a href="/inwestycje/dane_dzienne" class="btn btn-secondary btn-sm">Anuluj</a>
+                    <button type="submit" class="btn btn-success btn-sm">Zapisz</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

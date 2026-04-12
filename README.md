@@ -2,42 +2,41 @@
 
 ## Zrealizowane zadania:
 
-### Etap 0: Fundamenty
-1. **Struktura folderów**: Ujednolicony podział na `etl`, `routes`, `templates` i `logs`.
-2. **Shared Layout**: Centralny szablon `base.html` w folderze `shared` (zintegrowany z Bootstrap 5 i FontAwesome).
-3. **Formatowanie**: Mechanizm polskiego formatowania liczb i walut.
-4. **ETL Shared**: Skrypt `kursy_nbp.py` dla całego klastra.
+### Etap 0: Fundamenty (System-Wide)
+1. **Dynamiczna Fabryka Aplikacji**: Ujednolicony `app.py` obsługujący dynamiczne ładowanie modułów (`inwestycje`, `zdrowie`, `finanse`) bez konfliktów tras.
+2. **Struktura folderów**: Ujednolicony podział na `etl`, `routes`, `templates` i `logs` w każdym module.
+3. **Shared Layout**: Centralny szablon `base.html` w folderze `shared` (zintegrowany z Bootstrap 5 i FontAwesome).
+4. **Modułowa logika**: Wydzielenie procesów pomocniczych do plików `utils.py` dla lepszej czytelności kodu.
 
 ### Etap 1: Moduł Zdrowie (ha_vita_pressure)
 1. **Pełny CRUD**: Implementacja odczytu, tworzenia, edycji i usuwania pomiarów ciśnienia.
-2. **Integracja IoT**:
-   - Automatyczne pobieranie danych pogodowych i geolokalizacji.
-   - Funkcja "Wprowadź" uzupełniająca dane z czujników.
-3. **Moduł raportowania**: Dedykowany szablon wydruku zoptymalizowany pod format A4.
+2. **Integracja IoT**: Automatyczne pobieranie danych pogodowych i geolokalizacji.
+3. **Raporty**: Szablon wydruku zoptymalizowany pod A4 dla lekarza.
 
-### Etap 2: Moduł Finanse (Home Budget) - DZISIAJ
-1. **Migracja Architektury**:
-   - Przeniesienie logiki do fabryki aplikacji (`create_app`).
-   - Implementacja wielofolderowego systemu szablonów (`ChoiceLoader`) łączącego zasoby lokalne i współdzielone.
-2. **Kompletna ewidencja (CRUD)**:
-   - **Stan Kont (ROR)**: Zarządzanie saldami bankowymi, lokatami, obligacjami oraz walutami (EUR/USD) z przelicznikiem kursów.
-   - **Wydatki**: Rozbudowana ewidencja z podziałem na żywność, opłaty, medycynę i koszty auta.
-   - **Przychody**: Rejestracja wpływów z ZUS, giełdy, odsetek i urzędów.
-3. **Zaawansowana Analiza i Raporty**:
-   - **Bilans Miesięczny**: Automatyczne zestawienie przychodów vs wydatków oraz narastający stan majątku (ROR).
-   - **Koszty Samochodu**: Raport zużycia paliwa, przebiegu oraz kosztu eksploatacji na 1 km.
-4. **Interfejs Użytkownika**:
-   - Kompaktowy, responsywny Dashboard (`index.html`) z szybkim dostępem do danych i analiz.
-   - Excelowy styl tabel z polskim formatowaniem walut (spacja jako separator, przecinek dla groszy).
-   - Modale dla uwag tekstowych w celu zachowania czytelności tabel.
+### Etap 2: Moduł Finanse (Home Budget)
+1. **Ewidencja ROR, Wydatków i Przychodów**: Pełne zarządzanie finansami domowymi z przelicznikiem walut.
+2. **Analiza Samochodowa**: Raport zużycia paliwa i kosztów eksploatacji (PLN/km).
+3. **Bilans**: Zestawienie miesięczne przychodów i wydatków z narastającym saldem majątku.
+
+### Etap 3: Moduł Inwestycje (Stock Portfolio) - DZISIAJ
+1. **Zarządzanie Portfelem**:
+   - Ewidencja transakcji w tabeli `obroty` (zakup/sprzedaż/stop-loss).
+   - Katalog spółek (`ticker`) z parametrami rynkowymi (Altman, Rating).
+2. **System Monitoringu ETL**:
+   - Dashboard aktualności danych bazujący na skanowaniu plików CSV (`import_gpw`, `import_zagr`, `stooq`).
+   - Dynamiczne statusy kolorystyczne (Zielony/Czerwony) w zależności od daty ostatniego importu.
+3. **Interaktywny Podgląd Danych**:
+   - Funkcja `get_csv_preview_html`: Podgląd surowych plików importu bezpośrednio w oknie modalnym (bez opuszczania strony).
+   - Integracja z bazą MySQL dla tabel `dane` (historyczne) i `dane_dzienne`.
+4. **Logika utils.py**: Centralizacja odczytu plików CSV i zapytań SQL w dedykowanym module pomocniczym.
 
 ## Ścieżki:
 - Główne wejście (Menu): `192.168.1.156/aplikacje`
-- Moduł Zdrowie: `192.168.1.156/zdrowie/pressure_list`
+- Moduł Zdrowie: `192.168.1.156/zdrowie`
 - Moduł Finanse: `192.168.1.156/finanse`
-- Pliki współdzielone: `/var/www/html/flask/shared/`
+- Moduł Inwestycje: `192.168.1.156/inwestycje`
 
 ## Następne kroki:
 - Automatyzacja backupów bazy danych MySQL dla wszystkich modułów.
-- Implementacja wykresów trendów (Chart.js) w module Bilansu.
-- Rozbudowa modułu inwestycyjnego o dane giełdowe online.
+- Implementacja wykresów trendów (Chart.js) dla notowań giełdowych.
+- Rozszerzenie ETL o automatyczne pobieranie danych ze Stooq API.
