@@ -1,36 +1,46 @@
 import os
-from flask import Flask, render_template
-from dotenv import load_dotenv
-import mysql.connector
+import sys
+from jinja2 import ChoiceLoader, FileSystemLoader
 
-load_dotenv()
+# Ścieżki
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+SHARED_TEMPLATES = os.path.abspath(os.path.join(BASE_DIR, '..', 'shared', 'templates'))
+LOCAL_TEMPLATES = os.path.join(BASE_DIR, 'templates')
 
-# Używamy ścieżki bezwzględnej dla pewności
-template_dir = os.path.abspath('../aplikacja/templates')
-app = Flask(__name__, template_folder=template_dir)
+# Dodanie ścieżki nadrzędnej dla importu create_app
+sys.path.append(os.path.abspath(os.path.join(BASE_DIR, '..')))
+from app import create_app
 
-def get_db_connection():
-    return mysql.connector.connect(
-        host=os.getenv('DB_HOST'),
-        user=os.getenv('DB_USER'),
-        password=os.getenv('DB_PASSWORD'),
-        database=os.getenv('DB_NAME'),
-        ssl_disabled=True
-    )
+# Inicjalizacja aplikacji
+app = create_app(template_folder=LOCAL_TEMPLATES)
 
+# Konfiguracja Jinja2, aby szukała w obu folderach (lokalnym i shared)
+app.jinja_loader = ChoiceLoader([
+    FileSystemLoader(LOCAL_TEMPLATES),
+    FileSystemLoader(SHARED_TEMPLATES)
+])
+
+# 1. Rejestracja standardowych modułów
+from routes import ror, wydatki, przychody
+ror.register_routes(app)
+wydatki.register_routes(app)
+przychody.register_routes(app)
+
+# 2. Rejestracja nowych Blueprintów
+from routes.bilans import bilans_bp
+from routes.car import car_bp
+
+bilans_bp.mysql = app.mysql
+car_bp.mysql = app.mysql
+
+app.register_blueprint(bilans_bp, url_prefix='/finanse/bilans')
+app.register_blueprint(car_bp, url_prefix='/finanse/car')
+
+# 3. Trasa główna
+from flask import render_template
 @app.route('/finanse')
 def index():
-    db_status = False
-    try:
-        conn = get_db_connection()
-        if conn.is_connected():
-            db_status = True
-        conn.close()
-    except Exception as e:
-        print(f"Błąd połączenia: {e}")
-        db_status = False
-
-    return render_template('index_finanse.html', db_connected=db_status)
+    return render_template('index.html')
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5001)
+    app.run(debug=True, host='0.0.0.0')
