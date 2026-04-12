@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid mt-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2><i class="fas fa-university text-primary"></i> Stan Kont (ROR)</h2>
+        <div class="btn-group">
+            <a href="{{ url_for('index') }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left"></i> Powrót</a>
+            <a href="{{ url_for('ror_create') }}" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Dodaj wpis</a>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-sm table-hover table-bordered bg-white" style="font-size: 0.82rem;">
+            <thead class="table-dark text-center">
+                <tr>
+                    <th>Data</th>
+                    <th>PKO</th>
+                    <th>mBank</th>
+                    <th>Millenium</th>
+                    <th>Obligacje</th>
+                    <th>Fundusze</th>
+                    <th>Lokaty</th>
+                    <th>Gotówka</th>
+                    <th>IKE/IKZE</th>
+                    <th>Giełda</th>
+                    <th>EURO</th>
+                    <th>USD</th>
+                    <th><i class="fas fa-comment-dots"></i></th>
+                    <th>Opcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                <tr>
+                    <td class="text-center">{{ row.data }}</td>
+                    <td class="text-end">{{ "{:,.2f}".format(row.PKO or 0).replace(",", " ").replace(".", ",").replace(" ", " ") }}</td>
+                    <td class="text-end">{{ "{:,.2f}".format(row.mBank or 0).replace(",", " ").replace(".", ",").replace(" ", " ") }}</td>
+                    <td class="text-end">{{ "{:,.2f}".format(row.Millenium or 0).replace(",", " ").replace(".", ",").replace(" ", " ") }}</td>
+                    <td class="text-end">{{ "{:,.2f}".format(row.obligacje or 0).replace(",", " ").replace(".", ",").replace(" ", " ") }}</td>
+                    <td class="text-end">{{ "{:,.2f}".format(row.fundusze or 0).replace(",", " ").replace(".", ",").replace(" ", " ") }}</td>
+                    <td class="text-end">{{ "{:,.2f}".format(row.lokaty or 0).replace(",", " ").replace(".", ",").replace(" ", " ") }}</td>
+                    <td class="text-end">{{ "{:,.2f}".format(row.gotowka or 0).replace(",", " ").replace(".", ",").replace(" ", " ") }}</td>
+                    <td class="text-end">{{ "{:,.2f}".format(row.ike_ikze or 0).replace(",", " ").replace(".", ",").replace(" ", " ") }}</td>
+                    <td class="text-end">{{ "{:,.2f}".format(row.gielda or 0).replace(",", " ").replace(".", ",").replace(" ", " ") }}</td>
+                    <td class="text-end">{{ "{:,.2f}".format(row.EURO or 0).replace(",", " ").replace(".", ",").replace(" ", " ") }}</td>
+                    <td class="text-end">{{ "{:,.2f}".format(row.USD or 0).replace(",", " ").replace(".", ",").replace(" ", " ") }}</td>
+                    <td class="text-center">
+                        {% if row.uwagi %}
+                        <a href="#" class="text-info" data-bs-toggle="modal" data-bs-target="#modalUwagi{{ row.id_ror }}">
+                            <i class="fas fa-sticky-note"></i>
+                        </a>
+                        <div class="modal fade" id="modalUwagi{{ row.id_ror }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content text-start">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Uwagi - {{ row.data }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body" style="font-size: 1rem;">{{ row.uwagi }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        <div class="btn-group btn-group-sm">
+                            <a href="{{ url_for('ror_view', id=row.id_ror) }}" class="btn btn-outline-secondary" title="Podgląd"><i class="fas fa-eye"></i></a>
+                            
+                            <a href="{{ url_for('ror_edit', id=row.id_ror) }}" class="btn btn-outline-primary" title="Edytuj"><i class="fas fa-edit"></i></a>
+                            
+                            <a href="{{ url_for('ror_delete', id=row.id_ror) }}" class="btn btn-outline-danger" onclick="return confirm('Usunąć wpis z dnia {{ row.data }}?')"><i class="fas fa-trash"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

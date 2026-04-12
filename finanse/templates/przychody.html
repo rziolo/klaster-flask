@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid mt-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2><i class="fas fa-hand-holding-usd text-success"></i> Lista Przychodów</h2>
+        <div class="btn-group">
+            <a href="{{ url_for('index') }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left"></i> Powrót</a>
+            <a href="{{ url_for('przychody_create') }}" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Dodaj przychód</a>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-sm table-hover table-bordered bg-white" style="font-size: 0.82rem;">
+            <thead class="table-dark text-center">
+                <tr>
+                    <th>Data</th>
+                    <th>ZUS Iwona</th>
+                    <th>ZUS Robert</th>
+                    <th>Giełda</th>
+                    <th>Odsetki</th>
+                    <th>Urząd</th>
+                    <th>Inne</th>
+                    <th>Suma</th>
+                    <th><i class="fas fa-comment-dots"></i></th>
+                    <th>Opcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                {% set suma = (row.ZUS_Iwona or 0) + (row.ZUS_Robert or 0) + (row.gielda or 0) + (row.odsetki or 0) + (row.urzad or 0) + (row.inne or 0) %}
+                <tr>
+                    <td class="text-center">{{ row.data }}</td>
+                    <td class="text-end">{{ "{:,.2f}".format(row.ZUS_Iwona or 0).replace(",", " ").replace(".", ",").replace(" ", " ") }}</td>
+                    <td class="text-end">{{ "{:,.2f}".format(row.ZUS_Robert or 0).replace(",", " ").replace(".", ",").replace(" ", " ") }}</td>
+                    <td class="text-end">{{ "{:,.2f}".format(row.gielda or 0).replace(",", " ").replace(".", ",").replace(" ", " ") }}</td>
+                    <td class="text-end">{{ "{:,.2f}".format(row.odsetki or 0).replace(",", " ").replace(".", ",").replace(" ", " ") }}</td>
+                    <td class="text-end">{{ "{:,.2f}".format(row.urzad or 0).replace(",", " ").replace(".", ",").replace(" ", " ") }}</td>
+                    <td class="text-end">{{ "{:,.2f}".format(row.inne or 0).replace(",", " ").replace(".", ",").replace(" ", " ") }}</td>
+                    <td class="text-end fw-bold text-success">{{ "{:,.2f}".format(suma).replace(",", " ").replace(".", ",").replace(" ", " ") }}</td>
+                    <td class="text-center">
+                        {% if row.uwagi %}
+                        <a href="#" class="text-info" data-bs-toggle="modal" data-bs-target="#modalUwagiP{{ row.id_przychody }}">
+                            <i class="fas fa-sticky-note"></i>
+                        </a>
+                        <div class="modal fade" id="modalUwagiP{{ row.id_przychody }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content text-start">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Uwagi - {{ row.data }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body" style="font-size: 1rem;">{{ row.uwagi }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        <div class="btn-group btn-group-sm">
+                            <a href="{{ url_for('przychody_view', id=row.id_przychody) }}" class="btn btn-outline-secondary" title="Podgląd"><i class="fas fa-eye"></i></a>
+                            <a href="{{ url_for('przychody_edit', id=row.id_przychody) }}" class="btn btn-outline-primary" title="Edytuj"><i class="fas fa-edit"></i></a>
+                            <a href="{{ url_for('przychody_delete', id=row.id_przychody) }}" class="btn btn-outline-danger" onclick="return confirm('Usunąć przychód z dnia {{ row.data }}?')"><i class="fas fa-trash"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

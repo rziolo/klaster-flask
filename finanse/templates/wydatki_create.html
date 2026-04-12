@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .form-compact label { font-size: 0.82rem; margin-bottom: 1px; color: #444; font-weight: 600; }
+    .form-compact .form-control { padding: 0.2rem 0.4rem; font-size: 0.88rem; text-align: right; }
+    .form-compact .form-control-date { text-align: center; }
+    .section-title { border-bottom: 1px solid #dc3545; margin: 12px 0 8px 0; font-weight: bold; color: #dc3545; font-size: 0.9rem; text-transform: uppercase; }
+</style>
+
+<div class="container-fluid mt-2">
+    <div class="card shadow-sm mx-auto" style="max-width: 800px;">
+        <div class="card-header {{ 'bg-secondary' if read_only else ('bg-primary' if edit_mode else 'bg-danger') }} text-white py-1">
+            <h5 class="mb-0">
+                <i class="fas {{ 'fa-eye' if read_only else ('fa-edit' if edit_mode else 'fa-plus-circle') }}"></i> 
+                {{ 'Podgląd' if read_only else ('Edycja' if edit_mode else 'Nowy wydatek') }}
+            </h5>
+        </div>
+        <div class="card-body py-2">
+            <form method="POST" class="form-compact">
+                <fieldset {{ 'disabled' if read_only }}>
+                    <div class="row gx-2 mb-2 justify-content-center">
+                        <div class="col-md-3 text-center">
+                            <label>Data</label>
+                            <input type="date" name="data" class="form-control form-control-date" value="{{ row.data if edit_mode else data_dzis }}" required>
+                        </div>
+                    </div>
+
+                    <div class="section-title">Kategorie wydatków</div>
+                    <div class="row gx-2 gy-2">
+                        <div class="col-md-3"><label>Żywność</label><input type="number" step="0.01" name="zywnosc" class="form-control" value="{{ row.zywnosc if edit_mode else '0.00' }}"></div>
+                        <div class="col-md-3"><label>Nieżywność</label><input type="number" step="0.01" name="niezywnosc" class="form-control" value="{{ row.niezywnosc if edit_mode else '0.00' }}"></div>
+                        <div class="col-md-3"><label>Opłaty</label><input type="number" step="0.01" name="oplaty" class="form-control" value="{{ row.oplaty if edit_mode else '0.00' }}"></div>
+                        <div class="col-md-3"><label>Medycyna</label><input type="number" step="0.01" name="medycyna" class="form-control" value="{{ row.medycyna if edit_mode else '0.00' }}"></div>
+                    </div>
+
+                    <div class="row gx-2 gy-2 mt-1">
+                        <div class="col-md-3"><label>Auto (koszt)</label><input type="number" step="0.01" name="car_cost" class="form-control" value="{{ row.car_cost if edit_mode else '0.00' }}"></div>
+                        <div class="col-md-3"><label>Auto (km)</label><input type="number" name="car_km" class="form-control" value="{{ row.car_km if edit_mode else '0' }}"></div>
+                        <div class="col-md-6"><label>Inne</label><input type="number" step="0.01" name="inne" class="form-control" value="{{ row.inne if edit_mode else '0.00' }}"></div>
+                    </div>
+
+                    <div class="section-title">Uwagi</div>
+                    <div class="col-12">
+                        <input type="text" name="uwagi" class="form-control text-start" value="{{ row.uwagi if edit_mode else '' }}" placeholder="...">
+                    </div>
+                </fieldset>
+
+                <div class="mt-3 text-center">
+                    <a href="{{ url_for('wydatki_list') }}" class="btn btn-sm btn-secondary px-3">{{ 'Zamknij' if read_only else 'Anuluj' }}</a>
+                    {% if not read_only %}
+                    <button type="submit" class="btn btn-sm {{ 'btn-primary' if edit_mode else 'btn-danger' }} px-4">
+                        {{ 'Zapisz zmiany' if edit_mode else 'Dodaj' }}
+                    </button>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
