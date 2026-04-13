@@ -3,9 +3,7 @@
 <div class="container mt-3">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2><i class="fas fa-plus-circle text-success"></i> Nowy wpis - Obroty</h2>
-        <a href="/inwestycje/obroty" class="btn btn-outline-secondary btn-sm">
-            <i class="fas fa-arrow-left"></i> Powrót
-        </a>
+        <a href="/inwestycje/obroty" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left"></i> Powrót</a>
     </div>
 
     <div class="card shadow-sm">
@@ -21,7 +19,6 @@
                             {% endfor %}
                         </select>
                     </div>
-
                     <div class="col-md-6 mb-3">
                         <label for="zakup_data" class="form-label">Data zakupu</label>
                         <input type="date" class="form-control form-control-sm" name="zakup_data" id="zakup_data" required>
@@ -33,15 +30,18 @@
                         <label for="zakup_cena" class="form-label">Cena zakupu</label>
                         <input type="text" class="form-control form-control-sm" name="zakup_cena" id="zakup_cena" placeholder="np. 123.45" required>
                     </div>
-
                     <div class="col-md-4 mb-3">
                         <label for="zakup_ilosc" class="form-label">Ilość</label>
                         <input type="number" class="form-control form-control-sm" name="zakup_ilosc" id="zakup_ilosc" required>
                     </div>
-
                     <div class="col-md-4 mb-3">
                         <label for="platforma" class="form-label">Platforma</label>
-                        <input type="text" class="form-control form-control-sm" name="platforma" id="platforma" placeholder="np. BOSSA, XTB">
+                        <select class="form-select form-select-sm" name="platforma" id="platforma" required>
+                            <option value="" selected disabled>Wybierz...</option>
+                            {% for p in platforms %}
+                            <option value="{{ p.platforma_name }}">{{ p.platforma_name }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                 </div>
 
@@ -51,9 +51,7 @@
                 </div>
 
                 <div class="text-end border-top pt-3">
-                    <button type="submit" class="btn btn-success btn-sm">
-                        <i class="fas fa-save"></i> Zapisz transakcję
-                    </button>
+                    <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-save"></i> Zapisz transakcję</button>
                 </div>
             </form>
         </div>

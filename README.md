@@ -18,17 +18,20 @@
 2. **Analiza Samochodowa**: Raport zużycia paliwa i kosztów eksploatacji (PLN/km).
 3. **Bilans**: Zestawienie miesięczne przychodów i wydatków z narastającym saldem majątku.
 
-### Etap 3: Moduł Inwestycje (Stock Portfolio) - DZISIAJ
-1. **Zarządzanie Portfelem**:
-   - Ewidencja transakcji w tabeli `obroty` (zakup/sprzedaż/stop-loss).
-   - Katalog spółek (`ticker`) z parametrami rynkowymi (Altman, Rating).
-2. **System Monitoringu ETL**:
+### Etap 3: Moduł Inwestycje (Stock Portfolio) - AKTUALIZACJA
+1. **Zarządzanie Portfelem (Obroty)**:
+   - Implementacja logicznego podziału na **Pozycje Bieżące** (otwarte) oraz pełną **Historię**.
+   - Sortowanie dynamiczne: widok bieżący sortowany alfabetycznie po Tickerze (`ASC`), historia po dacie zakupu.
+   - Zaawansowane formatowanie walutowe (PLN) w tabelach i widokach szczegółowych.
+2. **Ujednolicenie Słowników (UI/UX)**:
+   - Wprowadzenie list rozwijanych (**Dropdown**) dla pól Ticker i Platforma we wszystkich formularzach CRUD.
+   - Dynamiczne pobieranie dostępnych rynków i platform bezpośrednio z bazy danych.
+3. **System Monitoringu ETL**:
    - Dashboard aktualności danych bazujący na skanowaniu plików CSV (`import_gpw`, `import_zagr`, `stooq`).
    - Dynamiczne statusy kolorystyczne (Zielony/Czerwony) w zależności od daty ostatniego importu.
-3. **Interaktywny Podgląd Danych**:
-   - Funkcja `get_csv_preview_html`: Podgląd surowych plików importu bezpośrednio w oknie modalnym (bez opuszczania strony).
+4. **Interaktywny Podgląd Danych**:
+   - Funkcja `get_csv_preview_html`: Podgląd surowych plików importu bezpośrednio w oknie modalnym.
    - Integracja z bazą MySQL dla tabel `dane` (historyczne) i `dane_dzienne`.
-4. **Logika utils.py**: Centralizacja odczytu plików CSV i zapytań SQL w dedykowanym module pomocniczym.
 
 ## Ścieżki:
 - Główne wejście (Menu): `192.168.1.156/aplikacje`

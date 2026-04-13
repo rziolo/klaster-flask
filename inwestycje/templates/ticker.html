@@ -37,6 +37,7 @@
                     <td>{{ row.altman if row.altman else '-' }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
+                            <a href="/inwestycje/ticker/view/{{ row.id_ticker }}" class="btn btn-outline-info"><i class="fas fa-eye"></i></a>
                             <a href="/inwestycje/ticker/edit/{{ row.id_ticker }}" class="btn btn-outline-primary"><i class="fas fa-edit"></i></a>
                             <a href="/inwestycje/ticker/delete/{{ row.id_ticker }}" class="btn btn-outline-danger" onclick="return confirm('Usunąć ticker {{ row.ticker_name }}?')"><i class="fas fa-trash"></i></a>
                         </div>

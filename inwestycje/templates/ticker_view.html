@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-3" style="max-width: 500px;">
+    <div class="card shadow-sm border-info">
+        <div class="card-header bg-info text-white py-2 d-flex justify-content-between">
+            <strong>Szczegóły Tickera</strong>
+            <span class="badge bg-light text-dark">ID: {{ row.id_ticker }}</span>
+        </div>
+        <div class="card-body">
+            <table class="table table-sm">
+                <tr><th class="small fw-bold w-50">Nazwa:</th><td>{{ row.ticker_name }}</td></tr>
+                <tr><th class="small fw-bold">Rynek:</th><td>{{ row.market }}</td></tr>
+                <tr><th class="small fw-bold">Rating:</th><td>{{ row.rating if row.rating else '-' }}</td></tr>
+                <tr><th class="small fw-bold">Altman:</th><td>{{ row.altman if row.altman else '-' }}</td></tr>
+            </table>
+            <div class="text-end mt-3">
+                <a href="/inwestycje/ticker" class="btn btn-secondary btn-sm">Powrót</a>
+                <a href="/inwestycje/ticker/edit/{{ row.id_ticker }}" class="btn btn-primary btn-sm">Edytuj</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

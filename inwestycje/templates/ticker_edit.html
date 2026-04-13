@@ -10,8 +10,14 @@
                     <input type="text" name="ticker_name" class="form-control form-control-sm" value="{{ row.ticker_name }}" required>
                 </div>
                 <div class="mb-3">
-                    <label class="small fw-bold">Rynek</label>
-                    <input type="text" name="market" class="form-control form-control-sm" value="{{ row.market }}">
+                    <label class="small fw-bold">Rynek / Platforma</label>
+                    <select name="market" class="form-select form-select-sm">
+                        {% for p in platforms %}
+                        <option value="{{ p.platforma_name }}" {{ 'selected' if p.platforma_name == row.market }}>
+                            {{ p.platforma_name }}
+                        </option>
+                        {% endfor %}
+                    </select>
                 </div>
                 <div class="row">
                     <div class="col-6 mb-3">

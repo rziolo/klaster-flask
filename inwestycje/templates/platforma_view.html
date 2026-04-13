@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-3" style="max-width: 500px;">
+    <div class="card shadow-sm border-info">
+        <div class="card-header bg-info text-white"><strong>Szczegóły Platformy</strong></div>
+        <div class="card-body">
+            <p><strong>Nazwa:</strong> {{ row.platforma_name }}</p>
+            <p><strong>URL:</strong> <a href="{{ row.url }}" target="_blank">{{ row.url }}</a></p>
+            <div class="text-end mt-3">
+                <a href="/inwestycje/platforma" class="btn btn-secondary btn-sm">Powrót</a>
+                <a href="/inwestycje/platforma/edit/{{ row.id_platforma }}" class="btn btn-primary btn-sm">Edytuj</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

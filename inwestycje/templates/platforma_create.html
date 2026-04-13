@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-3" style="max-width: 600px;">
+    <div class="card shadow-sm border-success">
+        <div class="card-header bg-success text-white"><strong>Dodaj nową Platformę</strong></div>
+        <div class="card-body">
+            <form method="POST">
+                <div class="mb-3">
+                    <label class="small fw-bold">Nazwa platformy</label>
+                    <input type="text" name="platforma_name" class="form-control" placeholder="np. DM BOŚ" required>
+                </div>
+                <div class="mb-3">
+                    <label class="small fw-bold">Adres URL</label>
+                    <input type="url" name="url" class="form-control" placeholder="https://...">
+                </div>
+                <div class="text-end">
+                    <a href="/inwestycje/platforma" class="btn btn-secondary btn-sm">Anuluj</a>
+                    <button type="submit" class="btn btn-success btn-sm">Zapisz platformę</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
