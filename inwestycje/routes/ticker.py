@@ -1,70 +1,77 @@
-from flask import Blueprint, render_template, current_app, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, current_app
 
 ticker_bp = Blueprint('ticker', __name__)
 
-# --- READ ---
-@ticker_bp.route('/ticker')
-def ticker_index():
+def clean_altman(val):
+    if val is None:
+        return None
+    val = str(val).strip().replace(',', '.')
+    # Jeśli wartość jest pusta lub jest dosłownym napisem "None" (z HTML)
+    if val == '' or val.lower() == 'none':
+        return None
     try:
-        mysql = current_app.mysql
-        cur = mysql.connection.cursor()
-        cur.execute("SELECT id_ticker, ticker_name, market, rating, altman FROM ticker ORDER BY ticker_name ASC")
-        rows = cur.fetchall()
-        cur.close()
-        return render_template('ticker.html', rows=rows)
-    except Exception as e:
-        return f"Błąd (Ticker Index): {e}"
+        return float(val)
+    except ValueError:
+        return None
 
-# --- CREATE ---
-@ticker_bp.route('/ticker/create', methods=['GET', 'POST'])
-def create():
-    if request.method == 'POST':
-        name = request.form.get('ticker_name')
-        market = request.form.get('market')
-        rating = request.form.get('rating')
-        altman = request.form.get('altman').replace(',', '.') if request.form.get('altman') else None
-        
-        mysql = current_app.mysql
-        cur = mysql.connection.cursor()
-        cur.execute("""
-            INSERT INTO ticker (ticker_name, market, rating, altman) 
-            VALUES (%s, %s, %s, %s)
-        """, (name, market, rating, altman))
-        mysql.connection.commit()
-        cur.close()
-        return redirect('/inwestycje/ticker')
-    return render_template('ticker_create.html')
+@ticker_bp.route('/inwestycje/ticker')
+def list():
+    cur = current_app.mysql.connection.cursor()
+    cur.execute("SELECT * FROM ticker ORDER BY ticker_name ASC")
+    rows = cur.fetchall()
+    cur.close()
+    return render_template('ticker.html', rows=rows)
 
-# --- EDIT ---
-@ticker_bp.route('/ticker/edit/<int:id>', methods=['GET', 'POST'])
-def edit(id):
-    mysql = current_app.mysql
-    cur = mysql.connection.cursor()
-    if request.method == 'POST':
-        name = request.form.get('ticker_name')
-        market = request.form.get('market')
-        rating = request.form.get('rating')
-        altman = request.form.get('altman').replace(',', '.') if request.form.get('altman') else None
-        
-        cur.execute("""
-            UPDATE ticker SET ticker_name=%s, market=%s, rating=%s, altman=%s 
-            WHERE id_ticker=%s
-        """, (name, market, rating, altman, id))
-        mysql.connection.commit()
-        cur.close()
-        return redirect('/inwestycje/ticker')
-    
+@ticker_bp.route('/inwestycje/ticker/view/<int:id>')
+def view(id):
+    cur = current_app.mysql.connection.cursor()
     cur.execute("SELECT * FROM ticker WHERE id_ticker = %s", (id,))
     row = cur.fetchone()
     cur.close()
-    return render_template('ticker_edit.html', row=row)
+    return render_template('ticker_view.html', row=row) if row else ("Not Found", 404)
 
-# --- DELETE ---
-@ticker_bp.route('/ticker/delete/<int:id>')
-def delete(id):
-    mysql = current_app.mysql
-    cur = mysql.connection.cursor()
-    cur.execute("DELETE FROM ticker WHERE id_ticker = %s", (id,))
-    mysql.connection.commit()
+@ticker_bp.route('/inwestycje/ticker/create', methods=['GET', 'POST'])
+def create():
+    cur = current_app.mysql.connection.cursor()
+    if request.method == 'POST':
+        altman = clean_altman(request.form.get('altman'))
+        cur.execute("INSERT INTO ticker (ticker_name, market, rating, altman) VALUES (%s, %s, %s, %s)",
+                   (request.form.get('ticker_name'), request.form.get('market'), request.form.get('rating'), altman))
+        current_app.mysql.connection.commit()
+        cur.close()
+        return redirect(url_for('ticker.list'))
+    
+    cur.execute("SELECT platforma_name FROM platforma ORDER BY platforma_name ASC")
+    platforms = cur.fetchall()
     cur.close()
-    return redirect('/inwestycje/ticker')
+    return render_template('ticker_create.html', platforms=platforms)
+
+@ticker_bp.route('/inwestycje/ticker/edit/<int:id>', methods=['GET', 'POST'])
+def edit(id):
+    cur = current_app.mysql.connection.cursor()
+    if request.method == 'POST':
+        altman = clean_altman(request.form.get('altman'))
+        cur.execute("""
+            UPDATE ticker 
+            SET ticker_name=%s, market=%s, rating=%s, altman=%s 
+            WHERE id_ticker=%s
+        """, (request.form.get('ticker_name'), request.form.get('market'), 
+              request.form.get('rating'), altman, id))
+        current_app.mysql.connection.commit()
+        cur.close()
+        return redirect(url_for('ticker.list'))
+
+    cur.execute("SELECT * FROM ticker WHERE id_ticker = %s", (id,))
+    row = cur.fetchone()
+    cur.execute("SELECT platforma_name FROM platforma ORDER BY platforma_name ASC")
+    platforms = cur.fetchall()
+    cur.close()
+    return render_template('ticker_edit.html', row=row, platforms=platforms) if row else ("Not Found", 404)
+
+@ticker_bp.route('/inwestycje/ticker/delete/<int:id>')
+def delete(id):
+    cur = current_app.mysql.connection.cursor()
+    cur.execute("DELETE FROM ticker WHERE id_ticker = %s", (id,))
+    current_app.mysql.connection.commit()
+    cur.close()
+    return redirect(url_for('ticker.list'))

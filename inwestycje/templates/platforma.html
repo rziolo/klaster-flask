@@ -5,7 +5,7 @@
         <h2><i class="fas fa-desktop text-primary"></i> Platformy Inwestycyjne</h2>
         <div class="btn-group">
             <a href="/inwestycje" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left"></i> Powrót</a>
-            <a href="/inwestycje/platforma/create" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Dodaj platformę</a>
+            <a href="{{ url_for('platforma.create') }}" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Dodaj platformę</a>
         </div>
     </div>
     <div class="table-responsive">
@@ -26,9 +26,9 @@
                     <td><a href="{{ row.url }}" target="_blank" class="text-decoration-none">{{ row.url }}</a></td>
                     <td>
                         <div class="btn-group btn-group-sm">
-                            <a href="/inwestycje/platforma/view/{{ row.id_platforma }}" class="btn btn-outline-info"><i class="fas fa-eye"></i></a>
-                            <a href="/inwestycje/platforma/edit/{{ row.id_platforma }}" class="btn btn-outline-primary"><i class="fas fa-edit"></i></a>
-                            <a href="/inwestycje/platforma/delete/{{ row.id_platforma }}" class="btn btn-outline-danger" onclick="return confirm('Usunąć platformę {{ row.platforma_name }}?')"><i class="fas fa-trash"></i></a>
+                            <a href="{{ url_for('platforma.view', id=row.id_platforma) }}" class="btn btn-outline-info"><i class="fas fa-eye"></i></a>
+                            <a href="{{ url_for('platforma.edit', id=row.id_platforma) }}" class="btn btn-outline-primary"><i class="fas fa-edit"></i></a>
+                            <a href="{{ url_for('platforma.delete', id=row.id_platforma) }}" class="btn btn-outline-danger" onclick="return confirm('Usunąć platformę {{ row.platforma_name }}?')"><i class="fas fa-trash"></i></a>
                         </div>
                     </td>
                 </tr>
